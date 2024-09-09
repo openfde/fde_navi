@@ -9,6 +9,7 @@
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QDesktopWidget>
+
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
 
@@ -18,8 +19,12 @@ int main(int argc, char *argv[]) {
     mainWidget.setGeometry(QApplication::desktop()->screenGeometry());
 
     // Create left and right buttons
-    QPushButton leftButton("←", &mainWidget);
-    QPushButton rightButton("→", &mainWidget);
+    QPushButton leftButton(QIcon(":/images/left.jpg"), " ",&mainWidget);
+    QPushButton rightButton(QIcon(":/images/right.jpg"), "",&mainWidget);
+
+    // Set icons for the buttons using PNG images
+    //leftButton.setIcon(QIcon(":/images/left.png"));
+    //rightButton.setIcon(QIcon(":/images/right.png"));
 
     // Create a layout for the buttons
     QHBoxLayout layout(&mainWidget);
