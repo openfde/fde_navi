@@ -8,7 +8,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = PushButtonTest
+TARGET = fde_navi
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -24,9 +24,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += main.cpp\
-        mywidget.cpp
+	navi.cpp
 
-HEADERS  += mywidget.h
+HEADERS  += navi.h
 
 RESOURCES += \
     fde_navi.qrc
