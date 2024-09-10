@@ -2,15 +2,54 @@
 #include <QPushButton>
 #include <QScreen>
 #include <QWidget>
+#include <QMouseEvent>
 
 class FloatingButton : public QPushButton {
+
 public:
     FloatingButton(const QString &text, QWidget *parent = nullptr)
-        : QPushButton(text, parent) {
+        : QPushButton(text, parent), otherButton(nullptr) {
         setFixedSize(100, 100); // 设置按钮大小
         setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint); // 无边框，始终在最上层
         setAttribute(Qt::WA_TranslucentBackground); // 背景透明
     }
+
+    void setOtherButton(FloatingButton *button) {
+        otherButton = button;
+    }
+
+protected:
+    void mousePressEvent(QMouseEvent *event) override {
+        if (event->button() == Qt::LeftButton) {
+            dragging = true;
+            dragStartPosition = event->globalPos() - pos();
+        }
+    }
+
+    void mouseMoveEvent(QMouseEvent *event) override {
+        if (dragging && (event->buttons() & Qt::LeftButton)) {
+            QPoint newPos = event->globalPos() - dragStartPosition;
+            
+            // 限制左右移动，只允许上下移动
+            move(x(), newPos.y());
+
+            // 同步另一个按钮的位置
+            if (otherButton) {
+                otherButton->move(otherButton->x(), newPos.y());
+            }
+        }
+    }
+
+    void mouseReleaseEvent(QMouseEvent *event) override {
+        if (event->button() == Qt::LeftButton) {
+            dragging = false;
+        }
+    }
+
+private:
+    QPoint dragStartPosition;
+    bool dragging = false;
+    FloatingButton *otherButton;
 };
 
 int main(int argc, char *argv[]) {
@@ -30,5 +69,10 @@ int main(int argc, char *argv[]) {
                        (screenGeometry.height() - rightButton->height()) / 2); // 右侧位置
     rightButton->show(); // 显示按钮
 
+    // 设置两个按钮互相知道对方
+    leftButton->setOtherButton(rightButton);
+    rightButton->setOtherButton(leftButton);
+
     return app.exec();
 }
+
