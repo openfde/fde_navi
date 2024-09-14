@@ -13,6 +13,9 @@ enum ArrayDirection {
     RIGHT = 1
 };
 
+const QString WindowName = "navi";
+const int WindowCount = 2 ; //have two navi 
+
 class DraggableButton : public QWidget {
 public:
     DraggableButton(ArrayDirection direction, const QString &iconPath, QWidget *parent = nullptr) : QWidget(parent) {
@@ -32,26 +35,12 @@ public:
 
         button->setAutoRepeat(false);
         setMouseTracking(true);
-        //新增qt代码 执行linux shell 命令wmctrl -d 获取所有屏幕数量
+        //标记自己的方向
         arrayDirection = direction;
-
-        QProcess process;
-        process.start("wmctrl", QStringList() << "-d");
-        process.waitForFinished();
-        QString output = process.readAllStandardOutput();
-        QStringList desktops_info = output.trimmed().split("\n");
-	for (const QString& line : desktops_info) {
-            desktopList.append(line.split(" ").first().toInt());
-            if (line.contains("*")) {
-                currentDesktopIndex = line.split(" ").first().toInt();
-                break;
-            }
-        }
     }
     void setOtherButton(DraggableButton *otherButton) {
         this->otherButton = otherButton;
     }
-    //调用
 //新增槽函数
 public slots:
     void onButtonPressed(){
@@ -70,67 +59,7 @@ public slots:
 		        return;
             }else if ( !longPressed){ 
 		        qDebug()<< arrayDirection << "button clicked";
-                QProcess process;
-                QList <int> tmpDesktopList;
-                process.start("wmctrl", QStringList() << "-d");
-                process.waitForFinished();
-                QString output = process.readAllStandardOutput();
-                QStringList desktops_info = output.trimmed().split("\n");
-                for (const QString& line : desktops_info) {
-		qDebug()<<line.split(" ").first().toInt();
-                    tmpDesktopList.append(line.split(" ").first().toInt());
-                }
-                QProcess sprocess;
-                if (arrayDirection == LEFT) {
-                    if (currentDesktopIndex == tmpDesktopList.first() ) {
-                        //获取最后的dekstop index,并切换到最后一个
-                        sprocess.start("wmctrl", QStringList() << "-s" << QString::number(tmpDesktopList.last()));
-                        sprocess.waitForFinished();
-                        //更新currentDesktopIndex
-                        qDebug()<<"currentDesktopIndex:"<<currentDesktopIndex <<"the last target desktop index:"<<tmpDesktopList.last();
-                        currentDesktopIndex = tmpDesktopList.last();
-                    }else {
-                        //增加调试语句
-                        sprocess.start("wmctrl", QStringList() << "-s" << QString::number(currentDesktopIndex -1));
-                        sprocess.waitForFinished();
-                        //更新currentDesktopIndex
-                        qDebug()<<"currentDesktopIndex:"<<currentDesktopIndex <<"the left target desktop index:"<< QString::number(currentDesktopIndex -1 );
-                        currentDesktopIndex = currentDesktopIndex -1;
-                    }
-                }else if (arrayDirection == RIGHT) {
-                      //参考上述代码，调整为向右方向，也执行上述逻辑
-                    if (currentDesktopIndex == tmpDesktopList.size() - 1 ) {
-                        // 获取第一个desktop index，并切换到第一个
-                        sprocess.start("wmctrl", QStringList() << "-s" << QString::number(tmpDesktopList.first()));
-                        sprocess.waitForFinished();
-                        //更新currentDesktopIndex  
-                        qDebug()<<"currentDesktopIndex:"<<currentDesktopIndex <<"the first desktop index:" + tmpDesktopList.first();
-                        currentDesktopIndex = tmpDesktopList.first();
-                        qDebug()<<"currentDesktopIndex:"<<currentDesktopIndex; 
-                    } else {
-                        //增加调试语句
-                        sprocess.start("wmctrl", QStringList() << "-s" << QString::number(currentDesktopIndex + 1));
-                        sprocess.waitForFinished();
-                        //更新currentDesktopIndex
-                        qDebug()<<"currentDesktopIndex:"<<currentDesktopIndex <<"the right target desktop index:"<< QString::number(currentDesktopIndex + 1);
-                        currentDesktopIndex = currentDesktopIndex +1;
-                    }
-                }
-                //通过wmctrl -l 获取当前窗口的id
-                process.start("wmctrl", QStringList() << "-l");
-                process.waitForFinished();
-                output = process.readAllStandardOutput();
-                QStringList windows = output.trimmed().split("\n");
-                for (const QString& window : windows) {
-                    if (window.contains("navi")) {
-                        QString windowId = window.split(" ").first();
-                        //将当前窗口移动到当前桌面
-                        QProcess sprocess;
-                        sprocess.start("wmctrl", QStringList() << "-ir"<< windowId<<"-t"<< QString::number(currentDesktopIndex));
-                        sprocess.waitForFinished();
-                    }
-                }
-                return  ;
+                return moveByClick();
             }
         }
 		longPressed = true;
@@ -145,6 +74,79 @@ public slots:
 
 
 protected:
+    //切换本窗口到当前桌面去
+    void moveToCurrentDesktop() {
+        //通过wmctrl -l 获取当前窗口的id   
+        QProcess process;
+        process.start("wmctrl", QStringList() << "-l");
+        process.waitForFinished();
+        QString output = process.readAllStandardOutput();
+        QStringList windows = output.trimmed().split("\n");
+        int count =  0 ;
+        for (const QString& window : windows) {
+            if (count == WindowCount) {
+                    break;
+                }
+            if (window.simplified().split(" ").at(3).contains(WindowName)) {
+                count++;
+                QString windowId = window.split(" ").first();
+                //将当前窗口移动到当前桌面
+                QProcess sprocess;
+                sprocess.start("wmctrl", QStringList() << "-ir"<< windowId<<"-t"<< QString::number(currentDesktopIndex));
+                sprocess.waitForFinished();
+            }
+        }
+    }
+
+
+
+void moveByClick() {
+    //获取当前桌面的index
+    QProcess process;
+    process.start("wmctrl", QStringList() << "-d");
+    process.waitForFinished();
+    QString output = process.readAllStandardOutput();
+    QStringList desktops_info = output.trimmed().split("\n");
+    QList<int> tmpDesktopList ;
+    for (const QString& line : desktops_info) {
+        tmpDesktopList.append(line.split(" ").first().toInt());
+        /*
+        0  * DG: 1920x1080  VP: 0,0  WA: 0,0 1920x1080  桌面 1   //当前桌面
+        1  - DG: 1920x1080  VP: 0,0  WA: 0,0 1920x1080  桌面 2
+        2  - DG: 1920x1080  VP: 0,0  WA: 0,0 1920x1034  桌面 3
+    */
+        if (line.simplified().split(" ").at(1).contains("*")) {    //按空格分割，多个空格也视作1个空格
+            currentDesktopIndex = line.split(" ").first().toInt();
+        }
+    }
+    if (tmpDesktopList.size() == 1) {//如果只有一个桌面，直接返回
+        return ;
+    }
+    int targetDesktop = 0;
+    if (arrayDirection == LEFT) {
+    if (currentDesktopIndex == tmpDesktopList.first()) {
+        targetDesktop = tmpDesktopList.last();
+    } else {
+        targetDesktop = currentDesktopIndex - 1;
+    }
+    } else if (arrayDirection == RIGHT) {
+    if (currentDesktopIndex == tmpDesktopList.size() - 1) {
+        targetDesktop = tmpDesktopList.first();
+    } else {
+        targetDesktop = currentDesktopIndex + 1;
+    }
+    }
+    moveToDesktop(targetDesktop);
+    moveToCurrentDesktop();
+    }
+
+
+void moveToDesktop(int desktopIndex) {
+    QProcess process;
+    process.start("wmctrl", QStringList() << "-s" << QString::number(desktopIndex));
+    process.waitForFinished();
+    currentDesktopIndex = desktopIndex;
+}
 
 void mousePressEvent(QMouseEvent *event) override {
     qDebug()<<"floating pressed"<<pos();
@@ -186,8 +188,6 @@ private:
     bool longPressed = false;
     bool dragging = false;
     DraggableButton *otherButton = nullptr;
-    //增加一个列表成员，用于存放一组动态变化的数值
-    QList<int> desktopList;
     //增加字段，记录当前的桌面index
     int currentDesktopIndex;
     //增加字段，记录自己的方向
