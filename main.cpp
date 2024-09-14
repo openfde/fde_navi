@@ -5,11 +5,17 @@
 #include <QScreen>
 #include <QDebug>
 #include<QDateTime>
+#include <QProcess>
 
+//增加enum 用于记录方向
+enum ArrayDirection {
+    LEFT = 0,
+    RIGHT = 1
+};
 
 class DraggableButton : public QWidget {
 public:
-    DraggableButton(const QString &iconPath, QWidget *parent = nullptr) : QWidget(parent) {
+    DraggableButton(ArrayDirection direction, const QString &iconPath, QWidget *parent = nullptr) : QWidget(parent) {
         button = new QPushButton("", this);
         //设置为无框透明，且总在最上面
         // button->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
@@ -26,10 +32,26 @@ public:
 
         button->setAutoRepeat(false);
         setMouseTracking(true);
+        //新增qt代码 执行linux shell 命令wmctrl -d 获取所有屏幕数量
+        arrayDirection = direction;
+
+        QProcess process;
+        process.start("wmctrl", QStringList() << "-d");
+        process.waitForFinished();
+        QString output = process.readAllStandardOutput();
+        QStringList desktops_info = output.trimmed().split("\n");
+	for (const QString& line : desktops_info) {
+            desktopList.append(line.split(" ").first().toInt());
+            if (line.contains("*")) {
+                currentDesktopIndex = line.split(" ").first().toInt();
+                break;
+            }
+        }
     }
     void setOtherButton(DraggableButton *otherButton) {
         this->otherButton = otherButton;
     }
+    //调用
 //新增槽函数
 public slots:
     void onButtonPressed(){
@@ -37,7 +59,7 @@ public slots:
         QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonPress, button->pos(), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
 	    dragging = true;
         dragStartPosition = event->globalPos() - frameGeometry().topLeft();
-	delete event;
+	    delete event;
     }
 
     void onButtonReleased(){
@@ -45,10 +67,70 @@ public slots:
         if (lastPressedTime.msecsTo(QDateTime::currentDateTime()) < 200 ) {
             //判断鼠标左键现在是否依然是按下的
             if (QApplication::mouseButtons() & Qt::LeftButton) { //鼠标依然按下，说明只是焦点离开了按钮，用户依然在长按拖动
-		return;
-            }else if ( !longPressed){ 
-		        qDebug()<<"button clicked";
 		        return;
+            }else if ( !longPressed){ 
+		        qDebug()<< arrayDirection << "button clicked";
+                QProcess process;
+                QList <int> tmpDesktopList;
+                process.start("wmctrl", QStringList() << "-d");
+                process.waitForFinished();
+                QString output = process.readAllStandardOutput();
+                QStringList desktops_info = output.trimmed().split("\n");
+                for (const QString& line : desktops_info) {
+		qDebug()<<line.split(" ").first().toInt();
+                    tmpDesktopList.append(line.split(" ").first().toInt());
+                }
+                QProcess sprocess;
+                if (arrayDirection == LEFT) {
+                    if (currentDesktopIndex == tmpDesktopList.first() ) {
+                        //获取最后的dekstop index,并切换到最后一个
+                        sprocess.start("wmctrl", QStringList() << "-s" << QString::number(tmpDesktopList.last()));
+                        sprocess.waitForFinished();
+                        //更新currentDesktopIndex
+                        qDebug()<<"currentDesktopIndex:"<<currentDesktopIndex <<"the last target desktop index:"<<tmpDesktopList.last();
+                        currentDesktopIndex = tmpDesktopList.last();
+                    }else {
+                        //增加调试语句
+                        sprocess.start("wmctrl", QStringList() << "-s" << QString::number(currentDesktopIndex -1));
+                        sprocess.waitForFinished();
+                        //更新currentDesktopIndex
+                        qDebug()<<"currentDesktopIndex:"<<currentDesktopIndex <<"the left target desktop index:"<< QString::number(currentDesktopIndex -1 );
+                        currentDesktopIndex = currentDesktopIndex -1;
+                    }
+                }else if (arrayDirection == RIGHT) {
+                      //参考上述代码，调整为向右方向，也执行上述逻辑
+                    if (currentDesktopIndex == tmpDesktopList.size() - 1 ) {
+                        // 获取第一个desktop index，并切换到第一个
+                        sprocess.start("wmctrl", QStringList() << "-s" << QString::number(tmpDesktopList.first()));
+                        sprocess.waitForFinished();
+                        //更新currentDesktopIndex  
+                        qDebug()<<"currentDesktopIndex:"<<currentDesktopIndex <<"the first desktop index:" + tmpDesktopList.first();
+                        currentDesktopIndex = tmpDesktopList.first();
+                        qDebug()<<"currentDesktopIndex:"<<currentDesktopIndex; 
+                    } else {
+                        //增加调试语句
+                        sprocess.start("wmctrl", QStringList() << "-s" << QString::number(currentDesktopIndex + 1));
+                        sprocess.waitForFinished();
+                        //更新currentDesktopIndex
+                        qDebug()<<"currentDesktopIndex:"<<currentDesktopIndex <<"the right target desktop index:"<< QString::number(currentDesktopIndex + 1);
+                        currentDesktopIndex = currentDesktopIndex +1;
+                    }
+                }
+                //通过wmctrl -l 获取当前窗口的id
+                process.start("wmctrl", QStringList() << "-l");
+                process.waitForFinished();
+                output = process.readAllStandardOutput();
+                QStringList windows = output.trimmed().split("\n");
+                for (const QString& window : windows) {
+                    if (window.contains("navi")) {
+                        QString windowId = window.split(" ").first();
+                        //将当前窗口移动到当前桌面
+                        QProcess sprocess;
+                        sprocess.start("wmctrl", QStringList() << "-ir"<< windowId<<"-t"<< QString::number(currentDesktopIndex));
+                        sprocess.waitForFinished();
+                    }
+                }
+                return  ;
             }
         }
 		longPressed = true;
@@ -104,13 +186,19 @@ private:
     bool longPressed = false;
     bool dragging = false;
     DraggableButton *otherButton = nullptr;
+    //增加一个列表成员，用于存放一组动态变化的数值
+    QList<int> desktopList;
+    //增加字段，记录当前的桌面index
+    int currentDesktopIndex;
+    //增加字段，记录自己的方向
+    ArrayDirection arrayDirection ;
 };
 
 //添加main方法
 int main(int argc , char * argv[]){
     QApplication app(argc, argv);
-    DraggableButton *lbtn = new DraggableButton(":/images/left.png");
-    DraggableButton *draggableButton = new DraggableButton(":/images/right.png");
+    DraggableButton *lbtn = new DraggableButton(LEFT,":/images/left.png");
+    DraggableButton *draggableButton = new DraggableButton(RIGHT,":/images/right.png");
     //设置draggableButton的大小为100 * 100
     draggableButton->setFixedSize(100, 100);
     lbtn->setFixedSize(100, 100);
