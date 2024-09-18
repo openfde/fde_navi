@@ -2,6 +2,7 @@
 #include <QPushButton>
 #include <QMouseEvent>
 #include <QApplication>
+#include <QVBoxLayout>
 #include <QScreen>
 #include <QDebug>
 #include<QDateTime>
@@ -194,23 +195,42 @@ private:
     ArrayDirection arrayDirection ;
 };
 
+
 //添加main方法
 int main(int argc , char * argv[]){
     QApplication app(argc, argv);
-    DraggableButton *lbtn = new DraggableButton(LEFT,":/images/left.png");
-    DraggableButton *draggableButton = new DraggableButton(RIGHT,":/images/right.png");
-    //设置draggableButton的大小为100 * 100
-    draggableButton->setFixedSize(100, 100);
-    lbtn->setFixedSize(100, 100);
+    //创建一个空的父widget,用于显示draggableButton
+    QWidget *widget = new QWidget();
+    widget->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnBottomHint);
     QRect screenRect = QGuiApplication::primaryScreen()->geometry();
+    widget->setGeometry(screenRect);
+
+    widget->setAttribute(Qt::WA_TranslucentBackground);
+    //widget->setWindowOpacity(0);
+
+    widget->setMouseTracking(false);
+   // widget->setDisabled(true);
+  //  widget->setFocusPolicy(Qt::NoFocus);
+
+    widget->showFullScreen();
+
+
+
+
+    DraggableButton *rbtn = new DraggableButton(RIGHT,":/images/right.png",widget);
+    DraggableButton *lbtn = new DraggableButton(LEFT,":/images/left.png",widget);
+    //设置draggableButton的大小为100 * 100
+    rbtn->setFixedSize(100, 100);
+    lbtn->setFixedSize(100, 100);
+    //QRect screenRect = QGuiApplication::primaryScreen()->geometry();
     //draggableButton 移动到屏幕的右侧中间
-    draggableButton->move(screenRect.width() - draggableButton->width(), screenRect.height() / 2 - draggableButton->height() / 2);
+    rbtn->move(screenRect.width() - rbtn->width(), screenRect.height() / 2 - rbtn->height() / 2);
     //lbtn 移动到屏幕的左侧中间
     lbtn->move(0, screenRect.height() / 2 - lbtn->height() / 2);
     //设置draggableButton的另一个按钮为lbtn
-    draggableButton->setOtherButton(lbtn);
+    rbtn->setOtherButton(lbtn);
+    lbtn->setOtherButton(rbtn);
     lbtn->show();
-    draggableButton->show();
-    lbtn->setOtherButton(draggableButton);
+    rbtn->show();
     return app.exec();
 }
