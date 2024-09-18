@@ -22,7 +22,7 @@ public:
         button = new QPushButton("", this);
         //设置为无框透明，且总在最上面
         // button->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
-        setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+        setWindowFlags(Qt::FramelessWindowHint |Qt::Tool|  Qt::WindowStaysOnTopHint);
         button->setIcon(QIcon(iconPath));
         button->setIconSize(QSize(80, 80));
         button->setFixedSize(100, 100);
