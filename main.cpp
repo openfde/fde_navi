@@ -1,7 +1,9 @@
 #include <QWidget>
 #include <QPushButton>
+#include <QPropertyAnimation>
 #include <QMouseEvent>
 #include <QApplication>
+#include <QVBoxLayout>
 #include <QScreen>
 #include <QDebug>
 #include<QDateTime>
@@ -14,7 +16,7 @@ enum ArrayDirection {
 };
 
 const QString WindowName = "navi";
-const int WindowCount = 2 ; //have two navi 
+const int WindowCount = 2 ; //have two navi
 
 class DraggableButton : public QWidget {
 public:
@@ -22,11 +24,14 @@ public:
         button = new QPushButton("", this);
         //设置为无框透明，且总在最上面
         // button->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+	    QPoint globalPos = button->mapToGlobal(QPoint(0, 0));
+        qDebug() << "Global position of the top-left corner:" << globalPos;
         setWindowFlags(Qt::FramelessWindowHint |Qt::Tool|  Qt::WindowStaysOnTopHint);
         button->setIcon(QIcon(iconPath));
         button->setIconSize(QSize(80, 80));
         button->setFixedSize(100, 100);
         button->move(0, 0);
+        reservedIconPath = iconPath;
         // button->setMouseTracking(true);
         //connect button的按下事件和一个槽函数
         connect(button, &QPushButton::pressed, this, &DraggableButton::onButtonPressed);
@@ -74,6 +79,44 @@ public slots:
 
 
 protected:
+
+
+    void enterEvent(QEvent *event) override {
+
+        if (arrayDirection == LEFT) {
+        }else {
+             if ( movedRight) {
+		     qDebug()<<"restore 90";
+                movedRight = false;
+                move(this->pos() - QPoint(90, 0));
+            }
+            //往左移动窗口90个像素
+            //button->move(button->pos().x() - 90, button->pos().y());
+        }
+        button->setFixedSize(100, 100);
+	button->setIcon(QIcon(reservedIconPath));
+	button->setIconSize(QSize(80, 80));
+        setFixedSize(100, 100);
+    }
+
+    void leaveEvent(QEvent *event) override {
+        if (arrayDirection == LEFT) {
+             button->setFixedSize(10, 100);
+        }else{
+            //往右移动窗口90个像素
+            if ( !movedRight) {
+		     qDebug()<<"rgith 90";
+                move(this->pos() + QPoint(90, 0));
+                movedRight = true;
+            }
+             //button->move(button->pos().x() + 90, button->pos().y());
+        }
+    	button->setFixedSize(10, 100);
+	button->setIcon(QIcon(":/images/icon-line.png"));
+	button->setIconSize(QSize(10, 10));
+        setFixedSize(10, 100);
+    }
+
     //切换本窗口到当前桌面去
     void moveToCurrentDesktop() {
         //通过wmctrl -l 获取当前窗口的id   
@@ -82,13 +125,13 @@ protected:
         process.waitForFinished();
         QString output = process.readAllStandardOutput();
         QStringList windows = output.trimmed().split("\n");
-        int count =  0 ;
+	int count =  0 ;
         for (const QString& window : windows) {
-            if (count == WindowCount) {
+	if (count == WindowCount) {
                     break;
                 }
             if (window.simplified().split(" ").at(3).contains(WindowName)) {
-                count++;
+		count++;
                 QString windowId = window.split(" ").first();
                 //将当前窗口移动到当前桌面
                 QProcess sprocess;
@@ -186,6 +229,8 @@ private:
     QPushButton *button;
     QPoint dragStartPosition;
     bool longPressed = false;
+    QString reservedIconPath;
+    bool movedRight = false;
     bool dragging = false;
     DraggableButton *otherButton = nullptr;
     //增加字段，记录当前的桌面index
@@ -194,23 +239,25 @@ private:
     ArrayDirection arrayDirection ;
 };
 
+
 //添加main方法
 int main(int argc , char * argv[]){
     QApplication app(argc, argv);
+
+    DraggableButton *rbtn = new DraggableButton(RIGHT,":/images/right.png");
     DraggableButton *lbtn = new DraggableButton(LEFT,":/images/left.png");
-    DraggableButton *draggableButton = new DraggableButton(RIGHT,":/images/right.png");
     //设置draggableButton的大小为100 * 100
-    draggableButton->setFixedSize(100, 100);
+    rbtn->setFixedSize(100, 100);
     lbtn->setFixedSize(100, 100);
     QRect screenRect = QGuiApplication::primaryScreen()->geometry();
     //draggableButton 移动到屏幕的右侧中间
-    draggableButton->move(screenRect.width() - draggableButton->width(), screenRect.height() / 2 - draggableButton->height() / 2);
+    rbtn->move(screenRect.width() - rbtn->width(), screenRect.height() / 2 - rbtn->height() / 2);
     //lbtn 移动到屏幕的左侧中间
     lbtn->move(0, screenRect.height() / 2 - lbtn->height() / 2);
     //设置draggableButton的另一个按钮为lbtn
-    draggableButton->setOtherButton(lbtn);
+    rbtn->setOtherButton(lbtn);
+    lbtn->setOtherButton(rbtn);
     lbtn->show();
-    draggableButton->show();
-    lbtn->setOtherButton(draggableButton);
+    rbtn->show();
     return app.exec();
 }
