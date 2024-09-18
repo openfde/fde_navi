@@ -201,7 +201,7 @@ int main(int argc , char * argv[]){
     QApplication app(argc, argv);
     //创建一个空的父widget,用于显示draggableButton
     QWidget *widget = new QWidget();
-    widget->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnBottomHint);
+    widget->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool| Qt::WindowStaysOnBottomHint);
     QRect screenRect = QGuiApplication::primaryScreen()->geometry();
     widget->setGeometry(screenRect);
 
