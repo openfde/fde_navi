@@ -20,18 +20,16 @@ const int WindowCount = 2 ; //have two navi
 
 class DraggableButton : public QWidget {
 public:
-    DraggableButton(ArrayDirection direction, const QString &iconPath, QWidget *parent = nullptr) : QWidget(parent) {
+    DraggableButton(ArrayDirection direction, const QString &iconPath, QRect rect, QWidget *parent = nullptr) : QWidget(parent) {
         button = new QPushButton("", this);
         //设置为无框透明，且总在最上面
-        // button->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
-	    QPoint globalPos = button->mapToGlobal(QPoint(0, 0));
-        qDebug() << "Global position of the top-left corner:" << globalPos;
         setWindowFlags(Qt::FramelessWindowHint |Qt::Tool|  Qt::WindowStaysOnTopHint);
         button->setIcon(QIcon(iconPath));
         button->setIconSize(QSize(80, 80));
         button->setFixedSize(100, 100);
         button->move(0, 0);
         reservedIconPath = iconPath;
+	reservedRect = rect;
         // button->setMouseTracking(true);
         //connect button的按下事件和一个槽函数
         connect(button, &QPushButton::pressed, this, &DraggableButton::onButtonPressed);
@@ -46,6 +44,46 @@ public:
     void setOtherButton(DraggableButton *otherButton) {
         this->otherButton = otherButton;
     }
+
+
+
+    void moveByHoverEntered() {
+        if (arrayDirection == RIGHT) {
+            if (movedRight) {
+		    qDebug()<<"right hover entered ",this->reservedIconPath;
+                button->setFixedSize(100,100);
+                setFixedSize(100,100);
+                button->setIcon(QIcon(reservedIconPath));
+                button->setIconSize(QSize(60,60));
+                move(reservedRect.width()-100, pos().y());
+                movedRight = false;
+            }
+        }else {
+                button->setFixedSize(100,100);
+                setFixedSize(100,100);
+                button->setIcon(QIcon(reservedIconPath));
+                button->setIconSize(QSize(60,60));
+            }
+      }
+
+    void moveByHoverLeaved() {
+        if (arrayDirection == RIGHT) {
+            if ( !movedRight) {
+                button->setFixedSize(10,100);
+                button->setIcon(QIcon(":/images/icon-line.png"));
+                button->setIconSize(QSize(10,10));
+                setFixedSize(10,100);
+                move(reservedRect.width()-10, pos().y());
+                movedRight = true;
+            }
+        }else {
+                button->setFixedSize(10,100);
+                setFixedSize(10,100);
+                button->setIcon(QIcon(":/images/icon-line.png"));
+                button->setIconSize(QSize(10,10));
+        }
+    }
+
 //新增槽函数
 public slots:
     void onButtonPressed(){
@@ -82,39 +120,17 @@ protected:
 
 
     void enterEvent(QEvent *event) override {
-
-        if (arrayDirection == LEFT) {
-        }else {
-             if ( movedRight) {
-		     qDebug()<<"restore 90";
-                movedRight = false;
-                move(this->pos() - QPoint(90, 0));
-            }
-            //往左移动窗口90个像素
-            //button->move(button->pos().x() - 90, button->pos().y());
+        moveByHoverEntered();
+        if (otherButton) {
+            otherButton->moveByHoverEntered();
         }
-        button->setFixedSize(100, 100);
-	button->setIcon(QIcon(reservedIconPath));
-	button->setIconSize(QSize(80, 80));
-        setFixedSize(100, 100);
     }
 
     void leaveEvent(QEvent *event) override {
-        if (arrayDirection == LEFT) {
-             button->setFixedSize(10, 100);
-        }else{
-            //往右移动窗口90个像素
-            if ( !movedRight) {
-		     qDebug()<<"rgith 90";
-                move(this->pos() + QPoint(90, 0));
-                movedRight = true;
-            }
-             //button->move(button->pos().x() + 90, button->pos().y());
+        moveByHoverLeaved();
+        if (otherButton){
+            otherButton->moveByHoverLeaved();
         }
-    	button->setFixedSize(10, 100);
-	button->setIcon(QIcon(":/images/icon-line.png"));
-	button->setIconSize(QSize(10, 10));
-        setFixedSize(10, 100);
     }
 
     //切换本窗口到当前桌面去
@@ -230,6 +246,7 @@ private:
     QPoint dragStartPosition;
     bool longPressed = false;
     QString reservedIconPath;
+    QRect reservedRect;
     bool movedRight = false;
     bool dragging = false;
     DraggableButton *otherButton = nullptr;
@@ -244,12 +261,12 @@ private:
 int main(int argc , char * argv[]){
     QApplication app(argc, argv);
 
-    DraggableButton *rbtn = new DraggableButton(RIGHT,":/images/right.png");
-    DraggableButton *lbtn = new DraggableButton(LEFT,":/images/left.png");
+    QRect screenRect = QGuiApplication::primaryScreen()->geometry();
+    DraggableButton *rbtn = new DraggableButton(RIGHT,":/images/right.png",screenRect);
+    DraggableButton *lbtn = new DraggableButton(LEFT,":/images/left.png",screenRect);
     //设置draggableButton的大小为100 * 100
     rbtn->setFixedSize(100, 100);
     lbtn->setFixedSize(100, 100);
-    QRect screenRect = QGuiApplication::primaryScreen()->geometry();
     //draggableButton 移动到屏幕的右侧中间
     rbtn->move(screenRect.width() - rbtn->width(), screenRect.height() / 2 - rbtn->height() / 2);
     //lbtn 移动到屏幕的左侧中间
