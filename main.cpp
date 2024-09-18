@@ -15,7 +15,6 @@ enum ArrayDirection {
 };
 
 const QString WindowName = "navi";
-const int WindowCount = 2 ; //have two navi 
 
 class DraggableButton : public QWidget {
 public:
@@ -83,18 +82,14 @@ protected:
         process.waitForFinished();
         QString output = process.readAllStandardOutput();
         QStringList windows = output.trimmed().split("\n");
-        int count =  0 ;
         for (const QString& window : windows) {
-            if (count == WindowCount) {
-                    break;
-                }
             if (window.simplified().split(" ").at(3).contains(WindowName)) {
-                count++;
                 QString windowId = window.split(" ").first();
                 //将当前窗口移动到当前桌面
                 QProcess sprocess;
                 sprocess.start("wmctrl", QStringList() << "-ir"<< windowId<<"-t"<< QString::number(currentDesktopIndex));
                 sprocess.waitForFinished();
+                break;
             }
         }
     }
@@ -211,7 +206,6 @@ int main(int argc , char * argv[]){
     widget->setMouseTracking(false);
    // widget->setDisabled(true);
   //  widget->setFocusPolicy(Qt::NoFocus);
-
     widget->showFullScreen();
 
 
