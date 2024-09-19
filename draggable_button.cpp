@@ -1,8 +1,6 @@
 #include "draggable_button.h"
 
-
-
- DraggableButton::DraggableButton(ArrayDirection direction, const QString &iconPath, QRect rect, QWidget *parent = nullptr) : QWidget(parent) {
+DraggableButton::DraggableButton(ArrayDirection direction, const QString &iconPath, QRect rect, QWidget *parent ) : QWidget(parent) {
     //设置为无框tool 模式，且总在最上面
     setWindowFlags(Qt::FramelessWindowHint |Qt::Tool|  Qt::WindowStaysOnTopHint);
     setAttribute(Qt::WA_StyledBackground);
@@ -28,7 +26,6 @@
         moveByHoverLeaved();
     });
  }
-
 
 void DraggableButton::onButtonPressed(){
         lastPressedTime = QDateTime::currentDateTime();
@@ -165,33 +162,3 @@ void DraggableButton::moveToDesktop(int desktopIndex) {
     currentDesktopIndex = desktopIndex;
 }
 
-void DraggableButton::mousePressEvent(QMouseEvent *event) override {
-    qDebug()<<"floating pressed"<<pos();
-    if (event->button() == Qt::LeftButton) {
-        dragging = true;
-        dragStartPosition = event->globalPos() - frameGeometry().topLeft();
-    }
-}
-
-void DraggableButton::mouseMoveEvent(QMouseEvent *event) override;
- {
-    if (dragging && (event->buttons() & Qt::LeftButton)) {
-        QPoint newPos = event->globalPos() - dragStartPosition;
-	    longPressed = true;
-        // 限制左右移动，只允许上下移动
-        move(pos().x(), newPos.y());
-
-        // 同步另一个按钮的位置
-        if (otherButton) {
-            otherButton->move(otherButton->pos().x(), newPos.y());
-        }
-        event->ignore();
-    }
-}
-
-void DraggableButton::mouseReleaseEvent(QMouseEvent *event) override {
-	qDebug()<<"floating released";
-    if (event->button() == Qt::LeftButton) {
-        dragging = false;
-    }
-}

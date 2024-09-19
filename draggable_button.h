@@ -4,11 +4,14 @@
 
 
 #include <QWidget>
+#include <QDebug>
 #include <QPushButton>
+#include <QApplication>
 #include <QTimer>
 #include <QMouseEvent>
-#include<QDateTime>
+#include <QDateTime>
 #include <QProcess>
+#include <QRect>
 
 
 //增加enum 用于记录方向
@@ -24,7 +27,8 @@ const int WindowCount = 2 ; //have two navi
 
 class DraggableButton : public QWidget {
 public:
-   void setOtherButton(DraggabelButton *otherButton) ;
+   DraggableButton(ArrayDirection direction, const QString &iconPath, QRect rect, QWidget *parent = nullptr);
+   void setOtherButton(DraggableButton *otherButton) ;
    void moveByHoverEntered();
    void moveByHoverLeaved();
   
@@ -35,27 +39,54 @@ public slots:
     void onButtonReleased();
 
 protected:
-    void enterEvent(QEvent *event) override {
+    void enterEvent(QEvent *) override {
         moveByHoverEntered();
         if (otherButton) {
             otherButton->moveByHoverEntered();
         }
     }
 
-    void leaveEvent(QEvent *event) override {
+    void leaveEvent(QEvent *) override {
         moveByHoverLeaved();
         if (otherButton){
             otherButton->moveByHoverLeaved();
         }
     }
 
+void mousePressEvent(QMouseEvent *event) override {
+    qDebug()<<"floating pressed"<<pos();
+    if (event->button() == Qt::LeftButton) {
+        dragging = true;
+        dragStartPosition = event->globalPos() - frameGeometry().topLeft();
+    }
+}
+
+void mouseMoveEvent(QMouseEvent *event) override {
+    if (dragging && (event->buttons() & Qt::LeftButton)) {
+        QPoint newPos = event->globalPos() - dragStartPosition;
+	    longPressed = true;
+        // 限制左右移动，只允许上下移动
+        move(pos().x(), newPos.y());
+
+        // 同步另一个按钮的位置
+        if (otherButton) {
+            otherButton->move(otherButton->pos().x(), newPos.y());
+        }
+        event->ignore();
+    }
+}
+
+void mouseReleaseEvent(QMouseEvent *event) override {
+	qDebug()<<"floating released";
+    if (event->button() == Qt::LeftButton) {
+        dragging = false;
+    }
+}
+
     //切换本窗口到当前桌面去
     void moveToCurrentDesktop();
     void moveByClick();
     void moveToDesktop(int desktopIndex);
-    void mousePressEvent(QMouseEvent *event) override;
-    void mouseMoveEvent(QMouseEvent *event) override;
-    void mouseReleaseEvent(QMouseEvent *event) override;
    
 
 private:

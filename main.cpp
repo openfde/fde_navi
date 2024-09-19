@@ -1,13 +1,10 @@
-#include <QWidget>
-#include <QPushButton>
-#include <QTimer>
-#include <QMouseEvent>
 #include <QApplication>
 #include <QScreen>
 #include <QDebug>
-#include<QDateTime>
-#include <QProcess>
+#include <QSystemTrayIcon>
+#include <QMenu>
 #include "draggable_button.h"
+
 
 
 
@@ -15,9 +12,9 @@
 int main(int argc , char * argv[]){
     QApplication app(argc, argv);
     //新增一个托盘图标功能
-    QSystemTrayIcon *trayIcon = new QSystemTrayIcon(QIcon(":/images/tray_icon.png"), &app);
+    QSystemTrayIcon *trayIcon = new QSystemTrayIcon(QIcon(":/images/dualArray.jpg"), &app);
     QMenu *trayMenu = new QMenu();
-    QAction *quitAction = new QAction("退出", &app);
+    QAction *quitAction = new QAction("Exit FDE navigator", &app);
     QObject::connect(quitAction, &QAction::triggered, &app, &QApplication::quit);
     trayMenu->addAction(quitAction);
     trayIcon->setContextMenu(trayMenu);
