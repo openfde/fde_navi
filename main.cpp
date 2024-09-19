@@ -1,5 +1,8 @@
 #include <QWidget>
+#include <QPainter>
+#include <QRegion>
 #include <QPushButton>
+#include <QTimer>
 #include <QPropertyAnimation>
 #include <QMouseEvent>
 #include <QApplication>
@@ -21,17 +24,18 @@ const int WindowCount = 2 ; //have two navi
 class DraggableButton : public QWidget {
 public:
     DraggableButton(ArrayDirection direction, const QString &iconPath, QRect rect, QWidget *parent = nullptr) : QWidget(parent) {
-        button = new QPushButton("", this);
-	button->setStyleSheet("QPushButton{border-radius: 50px;}");
-        //设置为无框透明，且总在最上面
+        //设置为无框tool 模式，且总在最上面
         setWindowFlags(Qt::FramelessWindowHint |Qt::Tool|  Qt::WindowStaysOnTopHint);
+	setAttribute(Qt::WA_StyledBackground);
+        setAttribute(Qt::WA_TranslucentBackground);
+
+        button = new QPushButton("", this);
+	button->setStyleSheet("QPushButton{border-radius: 15px; }");
         button->setIcon(QIcon(iconPath));
         button->setIconSize(QSize(80, 80));
         button->setFixedSize(100, 100);
-        button->move(0, 0);
         reservedIconPath = iconPath;
 	reservedRect = rect;
-        // button->setMouseTracking(true);
         //connect button的按下事件和一个槽函数
         connect(button, &QPushButton::pressed, this, &DraggableButton::onButtonPressed);
         //connect button的释放事件和一个槽函数
@@ -41,47 +45,57 @@ public:
         setMouseTracking(true);
         //标记自己的方向
         arrayDirection = direction;
+	 QTimer::singleShot(3000, this, [this](){
+            moveByHoverLeaved();
+        });
     }
     void setOtherButton(DraggableButton *otherButton) {
         this->otherButton = otherButton;
     }
 
 
+    /*void paintEvent(QPaintEvent *event) override {
+        QPainter painter(this);
+        painter.setRenderHint(QPainter::Antialiasing);
+
+        painter.setBrush(QColor(192,192,192)); // 灰色填充色
+        painter.drawRoundedRect(rect(), 15,15); // 绘制带圆角的矩形
+    }
+
+    void resizeEvent(QResizeEvent *event) override {
+        QRegion region = QRegion(0, 0, width(), height(), QRegion::Rectangle);
+        setMask(region);
+    }
+    */
+
 
     void moveByHoverEntered() {
-        if (arrayDirection == RIGHT) {
-            if (movedRight) {
+        if ( (arrayDirection == RIGHT && movedRight) || (arrayDirection == LEFT) ) {
                 button->setFixedSize(100,100);
                 setFixedSize(100,100);
                 button->setIcon(QIcon(reservedIconPath));
-                button->setIconSize(QSize(60,60));
+                button->setIconSize(QSize(80,80));
+		button->setStyleSheet("QPushButton{border-radius: 15px; }");
+	}
+        if ((arrayDirection == RIGHT && movedRight) ){
                 move(reservedRect.width()-100, pos().y());
                 movedRight = false;
-            }
-        }else {
-                button->setFixedSize(100,100);
-                setFixedSize(100,100);
-                button->setIcon(QIcon(reservedIconPath));
-                button->setIconSize(QSize(60,60));
-            }
-      }
+        }
+    }
 
     void moveByHoverLeaved() {
-        if (arrayDirection == RIGHT) {
-            if ( !movedRight) {
+        if ( (arrayDirection == RIGHT && !movedRight) || (arrayDirection == LEFT) ) {
                 button->setFixedSize(10,100);
                 button->setIcon(QIcon(":/images/line.png"));
+		button->setStyleSheet("QPushButton{border-radius: 5px; }");
                 button->setIconSize(QSize(50,50));
                 setFixedSize(10,100);
-                move(reservedRect.width()-10, pos().y());
-                movedRight = true;
-            }
-        }else {
-                button->setFixedSize(10,100);
-                setFixedSize(10,100);
-                button->setIcon(QIcon(":/images/line.png"));
-                button->setIconSize(QSize(50,50));
         }
+	if ( arrayDirection == RIGHT && !movedRight) {
+		move(reservedRect.width()-10, pos().y());
+		button->setStyleSheet("QPushButton { padding-right: 5px; }");
+		movedRight = true;
+	}
     }
 
 //新增槽函数
@@ -99,25 +113,24 @@ public slots:
         if (lastPressedTime.msecsTo(QDateTime::currentDateTime()) < 200 ) {
             //判断鼠标左键现在是否依然是按下的
             if (QApplication::mouseButtons() & Qt::LeftButton) { //鼠标依然按下，说明只是焦点离开了按钮，用户依然在长按拖动
-		        return;
+	        return;
             }else if ( !longPressed){ 
-		        qDebug()<< arrayDirection << "button clicked";
+	        qDebug()<< arrayDirection << "button clicked";
                 return moveByClick();
             }
         }
-		longPressed = true;
-	    if ((longPressed) && !(QApplication::mouseButtons() & Qt::LeftButton)) { //鼠标左键已然弹
-		    longPressed = false;
-		    dragging = false;
-		    qDebug()<<"floating release by btn";
-	    }
+	longPressed = true;
+	if ((longPressed) && !(QApplication::mouseButtons() & Qt::LeftButton)) { //鼠标左键已然弹
+	    longPressed = false;
+	    dragging = false;
+	    qDebug()<<"floating release by btn";
+	}
         return ;
     }
 
 
 
 protected:
-
 
     void enterEvent(QEvent *event) override {
         moveByHoverEntered();
@@ -262,12 +275,19 @@ int main(int argc , char * argv[]){
     QApplication app(argc, argv);
 
     QRect screenRect = QGuiApplication::primaryScreen()->geometry();
+
     DraggableButton *rbtn = new DraggableButton(RIGHT,":/images/right.png",screenRect);
     DraggableButton *lbtn = new DraggableButton(LEFT,":/images/left.png",screenRect);
+    rbtn->setWindowOpacity(0.8);
+    rbtn->setStyleSheet("background-color: rgba(192,192,192,0.8);");
+    lbtn->setWindowOpacity(0.8);
+    lbtn->setStyleSheet("background-color: rgba(192,192,192, 0.8);");
+
+//	rbtn->setStyleSheet("QWidget{border-radius: 50px;  }");
     //设置draggableButton的大小为100 * 100
     rbtn->setFixedSize(100, 100);
     lbtn->setFixedSize(100, 100);
-    //draggableButton 移动到屏幕的右侧中间
+    //rbtn 移动到屏幕的右侧中间
     rbtn->move(screenRect.width() - rbtn->width(), screenRect.height() / 2 - rbtn->height() / 2);
     //lbtn 移动到屏幕的左侧中间
     lbtn->move(0, screenRect.height() / 2 - lbtn->height() / 2);
