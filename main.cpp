@@ -22,6 +22,7 @@ class DraggableButton : public QWidget {
 public:
     DraggableButton(ArrayDirection direction, const QString &iconPath, QRect rect, QWidget *parent = nullptr) : QWidget(parent) {
         button = new QPushButton("", this);
+	button->setStyleSheet("QPushButton{border-radius: 50px;}");
         //设置为无框透明，且总在最上面
         setWindowFlags(Qt::FramelessWindowHint |Qt::Tool|  Qt::WindowStaysOnTopHint);
         button->setIcon(QIcon(iconPath));
@@ -50,7 +51,6 @@ public:
     void moveByHoverEntered() {
         if (arrayDirection == RIGHT) {
             if (movedRight) {
-		    qDebug()<<"right hover entered ",this->reservedIconPath;
                 button->setFixedSize(100,100);
                 setFixedSize(100,100);
                 button->setIcon(QIcon(reservedIconPath));
@@ -70,8 +70,8 @@ public:
         if (arrayDirection == RIGHT) {
             if ( !movedRight) {
                 button->setFixedSize(10,100);
-                button->setIcon(QIcon(":/images/icon-line.png"));
-                button->setIconSize(QSize(10,10));
+                button->setIcon(QIcon(":/images/line.png"));
+                button->setIconSize(QSize(50,50));
                 setFixedSize(10,100);
                 move(reservedRect.width()-10, pos().y());
                 movedRight = true;
@@ -79,8 +79,8 @@ public:
         }else {
                 button->setFixedSize(10,100);
                 setFixedSize(10,100);
-                button->setIcon(QIcon(":/images/icon-line.png"));
-                button->setIconSize(QSize(10,10));
+                button->setIcon(QIcon(":/images/line.png"));
+                button->setIconSize(QSize(50,50));
         }
     }
 
