@@ -1,0 +1,7 @@
+*.deb
+*orig.tar.xz
+*.ddeb
+fde_navi
+*.buildinfo
+.debhelper
+fdenavi_*.tar.xz

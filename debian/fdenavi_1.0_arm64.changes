@@ -1,0 +1,34 @@
+Format: 1.8
+Date: Fri, 20 Sep 2024 13:56:06 +0800
+Source: fdenavi
+Binary: fdenavi
+Architecture: source arm64
+Version: 1.0
+Distribution: unstable
+Urgency: medium
+Maintainer: warlice <openfde@openfde.com>
+Changed-By: warlice <openfde@openfde.com>
+Description:
+ fdenavi    - <insert up to 60 chars description>
+Changes:
+ fdenavi (1.0) unstable; urgency=medium
+ .
+   * Initial Release.
+Checksums-Sha1:
+ 074ddb155f6e352e8e76ecf4ada03c14a0a86bf6 556 fdenavi_1.0.dsc
+ e56d45cb626b05f8625f72022e0555a82254d034 1155492 fdenavi_1.0.tar.xz
+ ad535e2ab10529548dd7ebc0874062eaa58e4cdd 336652 fdenavi-dbgsym_1.0_arm64.ddeb
+ 29e2bad8c101acae2d59bd1dd73ba7ea05c4cf4a 8160 fdenavi_1.0_arm64.buildinfo
+ 074b3bce73297c19234c8b7cfdce5409d8f20134 310428 fdenavi_1.0_arm64.deb
+Checksums-Sha256:
+ a4847b417b82d281b4a2bdb6abd3198dca5f0b278c09bad6e12b98a88ece810f 556 fdenavi_1.0.dsc
+ 37bf4a368877b919567f5ddd467a72f53f7d7b7e28648d66c238891246722bf2 1155492 fdenavi_1.0.tar.xz
+ 7c5a7f82c73eae4f478566faa380e0fb7c06bdc2f6a434e98aaf9e99225dabfc 336652 fdenavi-dbgsym_1.0_arm64.ddeb
+ 1940e0cb198502b0c25b1c7759fab95a68c4795c94a3249ef153af22c775cb83 8160 fdenavi_1.0_arm64.buildinfo
+ 100c994781ba5bee7976333961e2df8a937648d310a8efac081edd395d262a8c 310428 fdenavi_1.0_arm64.deb
+Files:
+ 478c312d04736450c664d619fd6163c7 556 unknown optional fdenavi_1.0.dsc
+ 6eee69435cb397b11ce09f4b71224615 1155492 unknown optional fdenavi_1.0.tar.xz
+ de243b662bdad3361b5e4cc9847ceaa7 336652 debug optional fdenavi-dbgsym_1.0_arm64.ddeb
+ c0b3d15a6f73ee94dac4785cdb45b46f 8160 unknown optional fdenavi_1.0_arm64.buildinfo
+ bccd2aa4f22ee642371eac5cc988cc2a 310428 unknown optional fdenavi_1.0_arm64.deb

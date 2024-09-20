@@ -1,0 +1,17 @@
+Source: fdenavi
+Section: unknown
+Priority: optional
+Maintainer: warlice <openfde@openfde.com>
+Build-Depends: debhelper-compat (= 12)
+Standards-Version: 4.4.1
+Homepage: <insert the upstream URL, if relevant>
+#Vcs-Browser: https://salsa.debian.org/debian/fdenavi
+#Vcs-Git: https://salsa.debian.org/debian/fdenavi.git
+
+Package: fdenavi
+Architecture: any
+Depends: ${shlibs:Depends}, 
+	wmctrl,	
+	${misc:Depends}
+Description: <insert up to 60 chars description>
+ <insert long description, indented with spaces>

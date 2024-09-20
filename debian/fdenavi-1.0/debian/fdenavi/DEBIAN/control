@@ -1,0 +1,11 @@
+Package: fdenavi
+Version: 1.0
+Architecture: arm64
+Maintainer: warlice <openfde@openfde.com>
+Installed-Size: 626
+Depends: libc6 (>= 2.17), libgcc-s1 (>= 3.0), libqt5core5a (>= 5.5.0), libqt5gui5 (>= 5.0.2) | libqt5gui5-gles (>= 5.0.2), libqt5widgets5 (>= 5.2.0), libstdc++6 (>= 5), wmctrl
+Section: unknown
+Priority: optional
+Homepage: <insert the upstream URL, if relevant>
+Description: <insert up to 60 chars description>
+ <insert long description, indented with spaces>
