@@ -4,20 +4,20 @@ Binary: fdenavi
 Architecture: arm64 source
 Version: 1.0
 Checksums-Md5:
- 478c312d04736450c664d619fd6163c7 556 fdenavi_1.0.dsc
+ 8de70a455e3e1d2dc5f3d6409ece66db 559 fdenavi_1.0.dsc
  de243b662bdad3361b5e4cc9847ceaa7 336652 fdenavi-dbgsym_1.0_arm64.ddeb
- bccd2aa4f22ee642371eac5cc988cc2a 310428 fdenavi_1.0_arm64.deb
+ eaffbc19f5d17826a56f147635b53c6a 5796028 fdenavi_1.0_arm64.deb
 Checksums-Sha1:
- 074ddb155f6e352e8e76ecf4ada03c14a0a86bf6 556 fdenavi_1.0.dsc
+ 0c0eff3b38b401841c50de554ee5bb6c1d7ac24a 559 fdenavi_1.0.dsc
  ad535e2ab10529548dd7ebc0874062eaa58e4cdd 336652 fdenavi-dbgsym_1.0_arm64.ddeb
- 074b3bce73297c19234c8b7cfdce5409d8f20134 310428 fdenavi_1.0_arm64.deb
+ d5b701c16bccb15b358f608bda5c130bc94e98ab 5796028 fdenavi_1.0_arm64.deb
 Checksums-Sha256:
- a4847b417b82d281b4a2bdb6abd3198dca5f0b278c09bad6e12b98a88ece810f 556 fdenavi_1.0.dsc
+ 45412e24d5509b91febf30f7eabd6bb303fb5a670f1f64572850fee219508e29 559 fdenavi_1.0.dsc
  7c5a7f82c73eae4f478566faa380e0fb7c06bdc2f6a434e98aaf9e99225dabfc 336652 fdenavi-dbgsym_1.0_arm64.ddeb
- 100c994781ba5bee7976333961e2df8a937648d310a8efac081edd395d262a8c 310428 fdenavi_1.0_arm64.deb
+ 4734b9f4ffa73ead508d8b549dd06982ff70316a6e59d892696e71a81ab0955f 5796028 fdenavi_1.0_arm64.deb
 Build-Origin: Ubuntu
 Build-Architecture: arm64
-Build-Date: Fri, 20 Sep 2024 15:19:02 +0800
+Build-Date: Fri, 20 Sep 2024 16:34:19 +0800
 Build-Tainted-By:
  merged-usr-via-symlinks
  usr-local-has-libraries

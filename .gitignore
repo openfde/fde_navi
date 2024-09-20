@@ -5,3 +5,6 @@ fde_navi
 *.buildinfo
 .debhelper
 fdenavi_*.tar.xz
+debian/fdenavi*/debian/fdenavi/usr/lib/fdeso
+debian/fdenavi*/fdeso
+debian/fdenavi*/so

@@ -10,8 +10,8 @@ Build-Depends: debhelper-compat (= 12)
 Package-List:
  fdenavi deb unknown optional arch=any
 Checksums-Sha1:
- e56d45cb626b05f8625f72022e0555a82254d034 1155492 fdenavi_1.0.tar.xz
+ 4d6badb01173390b411fadaa0d3876be97e58cd6 24914784 fdenavi_1.0.tar.xz
 Checksums-Sha256:
- 37bf4a368877b919567f5ddd467a72f53f7d7b7e28648d66c238891246722bf2 1155492 fdenavi_1.0.tar.xz
+ 6c3a34164d2ce1ebd76e8c0a3fc9eeac171490a548c9edb0d6ee1cf2d716ebc7 24914784 fdenavi_1.0.tar.xz
 Files:
- 6eee69435cb397b11ce09f4b71224615 1155492 fdenavi_1.0.tar.xz
+ 48efb2fa6625ee7e6df2e695be096420 24914784 fdenavi_1.0.tar.xz
