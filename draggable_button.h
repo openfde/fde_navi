@@ -47,10 +47,16 @@ protected:
     }
 
     void leaveEvent(QEvent *) override {
+    QTimer::singleShot(3000, this, [this](){
+	     //判断当前鼠标是否在按钮上，如果在按钮上，不做任何事情
+        if (button->rect().contains(button->mapFromGlobal(QCursor::pos()))) {
+            return;
+        }
         moveByHoverLeaved();
         if (otherButton){
             otherButton->moveByHoverLeaved();
-        }
+	}
+    });
     }
 
 void mousePressEvent(QMouseEvent *event) override {
