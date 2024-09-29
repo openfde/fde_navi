@@ -12,9 +12,8 @@ ver=1.0
 dst_dir=`ls debian/ -l |grep ^d |awk -F " " '{print $NF}' |tr -d " "`
 dst=debian/$dst_dir
 
-tar -cJvpf $dst/fdenavi_${ver}.orig.tar.xz  fde_navi fdeso
+tar -cJvpf $dst/fdenavi_${ver}.orig.tar.xz  fde_navi 
 cp -a fde_navi $dst/
-cp -a fdeso $dst
 pushd $dst
 dch -i 
 
