@@ -2,7 +2,7 @@
 
 DraggableButton::DraggableButton(ArrayDirection direction, const QString &iconPath, QRect rect, QWidget *parent ) : QWidget(parent) {
     //设置为无框tool 模式，且总在最上面
-    setWindowFlags(Qt::FramelessWindowHint |Qt::Tool|  Qt::WindowStaysOnTopHint);
+    setWindowFlags( Qt::FramelessWindowHint |Qt::ToolTip|  Qt::WindowStaysOnTopHint);
     setAttribute(Qt::WA_StyledBackground);
     setAttribute(Qt::WA_TranslucentBackground);
 
@@ -90,29 +90,6 @@ void DraggableButton::moveByHoverLeaved() {
     }
 }
 
-//切换本窗口到当前桌面去
-void DraggableButton::moveToCurrentDesktop() {
-    //通过wmctrl -l 获取当前窗口的id   
-    QProcess process;
-    process.start("wmctrl", QStringList() << "-l");
-    process.waitForFinished();
-    QString output = process.readAllStandardOutput();
-    QStringList windows = output.trimmed().split("\n");
-    int count =  0 ;
-    for (const QString& window : windows) {
-        if (count == WindowCount) {
-            break;
-        }
-        if (window.simplified().split(" ").at(3).contains(WindowName)) {
-            count++;
-            QString windowId = window.split(" ").first();
-            //将当前窗口移动到当前桌面
-            QProcess sprocess;
-            sprocess.start("wmctrl", QStringList() << "-ir"<< windowId<<"-t"<< QString::number(currentDesktopIndex));
-            sprocess.waitForFinished();
-        }
-    }
-}
 
 void DraggableButton::moveByClick() {
     //获取当前桌面的index
@@ -151,7 +128,6 @@ void DraggableButton::moveByClick() {
         }
     }
     moveToDesktop(targetDesktop);
-    moveToCurrentDesktop();
 }
 
 

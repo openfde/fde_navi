@@ -20,10 +20,6 @@ enum ArrayDirection {
     RIGHT = 1
 };
 
-const QString WindowName = "fde_navi";
-const int WindowCount = 2 ; //have two navi
-
-
 
 class DraggableButton : public QWidget {
 public:

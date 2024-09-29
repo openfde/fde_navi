@@ -12,7 +12,7 @@
 int main(int argc , char * argv[]){
     QApplication app(argc, argv);
     //新增一个托盘图标功能
-    QSystemTrayIcon *trayIcon = new QSystemTrayIcon(QIcon(":/images/dualArray.jpg"), &app);
+    QSystemTrayIcon *trayIcon = new QSystemTrayIcon(QIcon(":/images/dualArrow.jpg"), &app);
     QMenu *trayMenu = new QMenu();
     QAction *quitAction = new QAction("Exit FDE navigator", &app);
     QObject::connect(quitAction, &QAction::triggered, &app, &QApplication::quit);
@@ -30,7 +30,6 @@ int main(int argc , char * argv[]){
     lbtn->setWindowOpacity(0.8);
     lbtn->setStyleSheet("background-color: rgba(192,192,192, 0.8);");
 
-//	rbtn->setStyleSheet("QWidget{border-radius: 50px;  }");
     //设置draggableButton的大小为100 * 100
     rbtn->setFixedSize(100, 100);
     lbtn->setFixedSize(100, 100);
