@@ -6,29 +6,29 @@ Architecture: source arm64
 Version: 1.0
 Distribution: unstable
 Urgency: medium
-Maintainer: warlice <openfde@openfde.com>
+Maintainer: openfde <openfde@openfde.com>
 Changed-By: warlice <openfde@openfde.com>
 Description:
- fdenavi    - <insert up to 60 chars description>
+ fdenavi    - OpenFDE desktop navigator on x11 server
 Changes:
  fdenavi (1.0) unstable; urgency=medium
  .
    * Initial Release.
 Checksums-Sha1:
- 0c0eff3b38b401841c50de554ee5bb6c1d7ac24a 559 fdenavi_1.0.dsc
- 4d6badb01173390b411fadaa0d3876be97e58cd6 24914784 fdenavi_1.0.tar.xz
- ad535e2ab10529548dd7ebc0874062eaa58e4cdd 336652 fdenavi-dbgsym_1.0_arm64.ddeb
- a3a9b99de51bfa8caf769a7577ab23abc6b81107 8163 fdenavi_1.0_arm64.buildinfo
- d5b701c16bccb15b358f608bda5c130bc94e98ab 5796028 fdenavi_1.0_arm64.deb
+ b351cdd7dfe67ddd0df5215507138330f316f9df 559 fdenavi_1.0.dsc
+ 293d3bfa3c763685e13f73453bc08e598d3cd97d 13550676 fdenavi_1.0.tar.xz
+ c6bcf9ff8626ed454fc4f13a93827db1cf1d5076 681348 fdenavi-dbgsym_1.0_arm64.ddeb
+ 9685c78286b34a05c5472c9ed6607f9476c899ba 8163 fdenavi_1.0_arm64.buildinfo
+ cdc3ce49bc1c8ff5e6c0f62fed2cc4d51129e277 6102676 fdenavi_1.0_arm64.deb
 Checksums-Sha256:
- 45412e24d5509b91febf30f7eabd6bb303fb5a670f1f64572850fee219508e29 559 fdenavi_1.0.dsc
- 6c3a34164d2ce1ebd76e8c0a3fc9eeac171490a548c9edb0d6ee1cf2d716ebc7 24914784 fdenavi_1.0.tar.xz
- 7c5a7f82c73eae4f478566faa380e0fb7c06bdc2f6a434e98aaf9e99225dabfc 336652 fdenavi-dbgsym_1.0_arm64.ddeb
- 13107f51c452c89a1cd4bfa9a22802d0252b9d39c3df197020bb327b642b7f2a 8163 fdenavi_1.0_arm64.buildinfo
- 4734b9f4ffa73ead508d8b549dd06982ff70316a6e59d892696e71a81ab0955f 5796028 fdenavi_1.0_arm64.deb
+ 17a7f885c248775170e7fc30549cc7319bc0b54b066610a54acb4dd2c4cf8e31 559 fdenavi_1.0.dsc
+ 07b653ee92922337a33950da3b1293557ab9ee9bf3f16d262b5d11d4ca9f1c66 13550676 fdenavi_1.0.tar.xz
+ 88d3ed44d8e5431687520fac5e08c8095b9a974aba03176d4b5058547ba788a3 681348 fdenavi-dbgsym_1.0_arm64.ddeb
+ fb6651797b7591aa40b846b35b825dc1f3596044a2710b6cd158f1c2ea45f227 8163 fdenavi_1.0_arm64.buildinfo
+ f153cc6af21daf14949a9631ac339ad0e4064d1d523a26d6370840e5f255d89b 6102676 fdenavi_1.0_arm64.deb
 Files:
- 8de70a455e3e1d2dc5f3d6409ece66db 559 unknown optional fdenavi_1.0.dsc
- 48efb2fa6625ee7e6df2e695be096420 24914784 unknown optional fdenavi_1.0.tar.xz
- de243b662bdad3361b5e4cc9847ceaa7 336652 debug optional fdenavi-dbgsym_1.0_arm64.ddeb
- f58f37256f2303ccbe5638d91f19183f 8163 unknown optional fdenavi_1.0_arm64.buildinfo
- eaffbc19f5d17826a56f147635b53c6a 5796028 unknown optional fdenavi_1.0_arm64.deb
+ 208f18265dc429b52e7b2b90fc0ffd72 559 unknown optional fdenavi_1.0.dsc
+ ebda9f8cb2b3e4b9d82407e9282a1874 13550676 unknown optional fdenavi_1.0.tar.xz
+ 89c94f44c6cbe686aa5a4e0fce395a5b 681348 debug optional fdenavi-dbgsym_1.0_arm64.ddeb
+ 8edddedad7037caee9bed6159a2093d0 8163 unknown optional fdenavi_1.0_arm64.buildinfo
+ 2ee42ec4395ffef857f74093ba694ef9 6102676 unknown optional fdenavi_1.0_arm64.deb

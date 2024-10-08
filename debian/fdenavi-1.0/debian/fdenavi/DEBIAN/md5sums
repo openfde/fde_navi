@@ -1,7 +1,4 @@
-24795c72c338c66bf2bab021ed751282  usr/bin/fde_navi
-dde5f6162058f14e9a963d60d3c82e73  usr/lib/fdeso/libQt5Core.so.5.12.12
-c1967da95a3e1f37eb7aa15192c38d71  usr/lib/fdeso/libQt5Gui.so.5.12.12
-4a7416513566a7c89e825a8f6e4a6723  usr/lib/fdeso/libQt5Widgets.so.5.12.12
+9317e4868b58e2ee5b8e4b0ec6a005b0  usr/bin/fde_navi
 fe56de28830290026fc8341da5f1b657  usr/share/doc/fdenavi/README.Debian
 bbee149c3622fd4424b6a6b17f26abe7  usr/share/doc/fdenavi/changelog.gz
 e3725b0dc6bc903b6ecc3acdfc05aab2  usr/share/doc/fdenavi/copyright

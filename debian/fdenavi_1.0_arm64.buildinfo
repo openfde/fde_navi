@@ -4,20 +4,20 @@ Binary: fdenavi
 Architecture: arm64 source
 Version: 1.0
 Checksums-Md5:
- 8de70a455e3e1d2dc5f3d6409ece66db 559 fdenavi_1.0.dsc
- de243b662bdad3361b5e4cc9847ceaa7 336652 fdenavi-dbgsym_1.0_arm64.ddeb
- eaffbc19f5d17826a56f147635b53c6a 5796028 fdenavi_1.0_arm64.deb
+ 208f18265dc429b52e7b2b90fc0ffd72 559 fdenavi_1.0.dsc
+ 89c94f44c6cbe686aa5a4e0fce395a5b 681348 fdenavi-dbgsym_1.0_arm64.ddeb
+ 2ee42ec4395ffef857f74093ba694ef9 6102676 fdenavi_1.0_arm64.deb
 Checksums-Sha1:
- 0c0eff3b38b401841c50de554ee5bb6c1d7ac24a 559 fdenavi_1.0.dsc
- ad535e2ab10529548dd7ebc0874062eaa58e4cdd 336652 fdenavi-dbgsym_1.0_arm64.ddeb
- d5b701c16bccb15b358f608bda5c130bc94e98ab 5796028 fdenavi_1.0_arm64.deb
+ b351cdd7dfe67ddd0df5215507138330f316f9df 559 fdenavi_1.0.dsc
+ c6bcf9ff8626ed454fc4f13a93827db1cf1d5076 681348 fdenavi-dbgsym_1.0_arm64.ddeb
+ cdc3ce49bc1c8ff5e6c0f62fed2cc4d51129e277 6102676 fdenavi_1.0_arm64.deb
 Checksums-Sha256:
- 45412e24d5509b91febf30f7eabd6bb303fb5a670f1f64572850fee219508e29 559 fdenavi_1.0.dsc
- 7c5a7f82c73eae4f478566faa380e0fb7c06bdc2f6a434e98aaf9e99225dabfc 336652 fdenavi-dbgsym_1.0_arm64.ddeb
- 4734b9f4ffa73ead508d8b549dd06982ff70316a6e59d892696e71a81ab0955f 5796028 fdenavi_1.0_arm64.deb
+ 17a7f885c248775170e7fc30549cc7319bc0b54b066610a54acb4dd2c4cf8e31 559 fdenavi_1.0.dsc
+ 88d3ed44d8e5431687520fac5e08c8095b9a974aba03176d4b5058547ba788a3 681348 fdenavi-dbgsym_1.0_arm64.ddeb
+ f153cc6af21daf14949a9631ac339ad0e4064d1d523a26d6370840e5f255d89b 6102676 fdenavi_1.0_arm64.deb
 Build-Origin: Ubuntu
 Build-Architecture: arm64
-Build-Date: Fri, 20 Sep 2024 16:34:19 +0800
+Build-Date: Tue, 08 Oct 2024 17:56:19 +0800
 Build-Tainted-By:
  merged-usr-via-symlinks
  usr-local-has-libraries
@@ -43,7 +43,7 @@ Installed-Build-Depends:
  cpp (= 4:9.3.0-11.185.1kylin2k7.5),
  cpp-9 (= 9.3.0-10kylin2),
  dash (= 0.5.10.2-6kylin3),
- dbus (= 1.12.16-2kylin2.3k0.5),
+ dbus (= 1.12.16-2kylin2.3k0.6),
  debconf (= 1.5.73),
  debhelper (= 12.10kylin1),
  debianutils (= 4.9.1),
@@ -105,7 +105,7 @@ Installed-Build-Depends:
  libctf-nobfd0 (= 2.34-6kylin1.4k0.1),
  libctf0 (= 2.34-6kylin1.4k0.1),
  libdb5.3 (= 5.3.28+dfsg1-0.6kylin2),
- libdbus-1-3 (= 1.12.16-2kylin2.3k0.5),
+ libdbus-1-3 (= 1.12.16-2kylin2.3k0.6),
  libdebconfclient0 (= 0.251kylin1-1),
  libdebhelper-perl (= 12.10kylin1),
  libdevmapper1.02.1 (= 2:1.02.167-1kylin1),
@@ -122,7 +122,7 @@ Installed-Build-Depends:
  libgcrypt20 (= 1.8.5-5kylin1.1),
  libgdbm-compat4 (= 1.18.1-5),
  libgdbm6 (= 1.18.1-5),
- libglib2.0-0 (= 2.64.6-1~kylin20.04.3k1.2),
+ libglib2.0-0 (= 2.64.6-1~kylin20.04.4k1.2),
  libgmp10 (= 2:6.2.0+dfsg-4kylin0.1k3),
  libgnutls30 (= 3.6.13-2kylin1.7k0.1),
  libgomp1 (= 10.3.0-1kylin1~20.04),
@@ -151,7 +151,7 @@ Installed-Build-Depends:
  liblzma5 (= 5.2.4-1kylin2.1),
  libmagic-mgc (= 1:5.38-4kylin0k2.2),
  libmagic1 (= 1:5.38-4kylin0k2.2),
- libmount1 (= 2.34-0.1kylin18k0.2),
+ libmount1 (= 2.34-0.1kylin19k0.1),
  libmpc3 (= 1.1.0-1),
  libmpfr6 (= 4.0.2-1),
  libnettle7 (= 3.5.1+really3.5.1-2kylin0.2),
@@ -196,7 +196,7 @@ Installed-Build-Depends:
  libudev1 (= 245.4-4kylin3.20k0.7),
  libunistring2 (= 0.9.10-2),
  libusb-1.0-0 (= 2:1.0.23-2build1),
- libuuid1 (= 2.34-0.1kylin18k0.2),
+ libuuid1 (= 2.34-0.1kylin19k0.1),
  libxml2 (= 2.9.10+dfsg-5kylin0.20.04.5),
  libzstd1 (= 1.4.4+dfsg-3kylin0.1),
  linux-libc-dev (= 5.4.18-85.74),
