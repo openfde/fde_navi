@@ -56,7 +56,6 @@ protected:
     }
 
 void mousePressEvent(QMouseEvent *event) override {
-    qDebug()<<"floating pressed"<<pos();
     if (event->button() == Qt::LeftButton) {
         dragging = true;
         dragStartPosition = event->globalPos() - frameGeometry().topLeft();
@@ -66,7 +65,6 @@ void mousePressEvent(QMouseEvent *event) override {
 void mouseMoveEvent(QMouseEvent *event) override {
     if (dragging && (event->buttons() & Qt::LeftButton)) {
         QPoint newPos = event->globalPos() - dragStartPosition;
-	    longPressed = true;
         // 限制左右移动，只允许上下移动
         move(pos().x(), newPos.y());
 
@@ -79,7 +77,6 @@ void mouseMoveEvent(QMouseEvent *event) override {
 }
 
 void mouseReleaseEvent(QMouseEvent *event) override {
-	qDebug()<<"floating released";
     if (event->button() == Qt::LeftButton) {
         dragging = false;
     }

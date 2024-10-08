@@ -30,9 +30,9 @@ DraggableButton::DraggableButton(ArrayDirection direction, const QString &iconPa
 void DraggableButton::onButtonPressed(){
         lastPressedTime = QDateTime::currentDateTime();
         QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonPress, button->pos(), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-	    dragging = true;
+	dragging = true;
         dragStartPosition = event->globalPos() - frameGeometry().topLeft();
-	    delete event;
+	delete event;
 }
 
 void DraggableButton::onButtonReleased(){
@@ -42,7 +42,6 @@ void DraggableButton::onButtonReleased(){
         if (QApplication::mouseButtons() & Qt::LeftButton) { //鼠标依然按下，说明只是焦点离开了按钮，用户依然在长按拖动
             return;
         }else if ( !longPressed){ 
-            qDebug()<< arrayDirection << "button clicked";
             return moveByClick();
         }
     }
@@ -50,7 +49,6 @@ void DraggableButton::onButtonReleased(){
     if ((longPressed) && !(QApplication::mouseButtons() & Qt::LeftButton)) { //鼠标左键已然弹
         longPressed = false;
         dragging = false;
-        qDebug()<<"floating release by btn";
     }
     return ;
 }

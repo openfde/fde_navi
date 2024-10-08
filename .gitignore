@@ -8,3 +8,4 @@ fdenavi_*.tar.xz
 debian/fdenavi*/debian/fdenavi/usr/lib/fdeso
 debian/fdenavi*/fdeso
 debian/fdenavi*/so
+qrc_fde_navi.cpp
