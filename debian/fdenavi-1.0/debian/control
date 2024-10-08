@@ -1,7 +1,7 @@
 Source: fdenavi
 Section: unknown
 Priority: optional
-Maintainer: warlice <openfde@openfde.com>
+Maintainer: openfde <openfde@openfde.com>
 Build-Depends: debhelper-compat (= 12)
 Standards-Version: 4.4.1
 Homepage: <insert the upstream URL, if relevant>
@@ -13,5 +13,4 @@ Architecture: any
 Depends: ${shlibs:Depends}, 
 	wmctrl,	
 	${misc:Depends}
-Description: <insert up to 60 chars description>
- <insert long description, indented with spaces>
+Description: OpenFDE desktop navigator on x11 server
